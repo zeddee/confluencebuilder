@@ -90,6 +90,8 @@ class ConfluenceTestUtil:
         config['confluence_space_name'] = 'unit-test'
         # support pre-Sphinx v2.0 installations which default to 'contents'
         config['master_doc'] = 'index'
+        # test experimental stub columns
+        config['confluence_stub_columns_experimental'] = True
 
         return config
 
