@@ -42,7 +42,9 @@ class ConfluenceStorageFormatTranslator(ConfluenceBaseTranslator):
         ConfluenceBaseTranslator.__init__(self, document, builder)
         config = builder.config
 
+        # set stub-columns feature flag
         self._stub_columns_experimental = config.confluence_stub_columns_experimental
+        # for stub-columns implementation
         self.colspecs = []
 
         self.add_secnumbers = config.confluence_add_secnumbers
@@ -721,6 +723,8 @@ class ConfluenceStorageFormatTranslator(ConfluenceBaseTranslator):
         self._thead_context.pop()
 
     def visit_tgroup(self, node):
+        # for stub-columns implementation
+        # see https://svn.code.sf.net/p/docutils/code/trunk/docutils/docutils/writers/_html_base.py
         node.stubs = []
 
     def depart_tgroup(self, node):
@@ -745,6 +749,8 @@ class ConfluenceStorageFormatTranslator(ConfluenceBaseTranslator):
     def visit_row(self, node):
         self.body.append(self._start_tag(node, 'tr', suffix=self.nl))
         self.context.append(self._end_tag(node))
+        # for stub-columns implmentation
+        # see https://svn.code.sf.net/p/docutils/code/trunk/docutils/docutils/writers/_html_base.py
         node.column = 0
 
     def depart_row(self, node):
@@ -755,6 +761,7 @@ class ConfluenceStorageFormatTranslator(ConfluenceBaseTranslator):
             target_tag = 'th'
         elif self._stub_columns_experimental and \
                 node.parent.parent.parent.stubs[node.parent.column]:
+            # for stub-columns implementation
             # see https://svn.code.sf.net/p/docutils/code/trunk/docutils/docutils/writers/_html_base.py
             target_tag = 'th'
             node.parent.column += 1
@@ -788,6 +795,7 @@ class ConfluenceStorageFormatTranslator(ConfluenceBaseTranslator):
         # because we're not actually implementing colspec,
         # don't write </colspec> tag
         pass
+
     # -------------------
     # references - common
     # -------------------
